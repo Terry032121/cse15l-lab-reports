@@ -1,9 +1,19 @@
-**Using cd without arguments**
+# CSE15l-lab1-report-Terry
+## 1.Command cd
+### **Using cd without arguments**
 ![Image](cd_no_args.jpg)
+The working directory when the command was run is hoome directory.<br>
 When you using command cd without arguments, it defaults to changing the current working directory to home directory.<br>
 *It is not an error* <br>
 
-**Using cd with a path to a directory as an argument**
+### **Using cd with a path to a directory as an argument**
 ![Image](WechatIMG1141.jpg)
+The working directory when the command was run is lecture1.<br>
 The output means that you have successfully using command cd to change directory to directory lecture1.<br>
 *It is not an error*<br>
+
+### **Using cd with a path to a file as an argument**
+![Image](WechatIMG1166.jpg)
+The workign directoty when the command was run is /lecture1/message.<br>
+The output means that we were trying to change directory to a file which we can not. The terminal was telling us that en-us.txt was a file.<br>
+*It is an error*
