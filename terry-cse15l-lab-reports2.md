@@ -49,6 +49,36 @@ class ChatServer {
 }
 ```
 ### screenshots of using `/add-message`
+#### Request 1: `add-message?s=What%27s%20up!!&user=Terry`
 ![image](labre2-1.jpg)
-![image](labre2-1.jpg)
+##### Methods Called:
+`handleRequest(URI url)` in Handler class: <br>
+This method is used when a request is received. <br>
+##### Relevant Arguments and Field Values: <br>
+`URI url`: Contains the URL of the request, which would be something like `https://0-0-0-0-4005-gb6t1n903ilvg1h94mja2uhmrg.us.edusercontent.com/add-message?s=What%27s%20up!!&user=Terry`. <br>
+`chat`: A StringBuilder object, initially empty. <br>
+##### Changes in Field Values:
+The `chat` StringBuilder is appended with the string `"Terry: What's up!!!\n"`. <br>
+After this request, chat.toString() would return `"Terry: What's up!!!\n"`. <br>
+#### Request 2: `add-message?s=How%27s%20your%20PA%20goes??&user=Jack`
+![image](labre2-2.jpg)
+
+##### Methods Called:
+`handleRequest(URI url)` in Handler class: <br>
+Again, this method is triggered for the new request. <br>
+##### Relevant Arguments and Field Values: <br>
+`URI url`: Contains the URL of the request, which would be something like `https://0-0-0-0-4005-gb6t1n903ilvg1h94mja2uhmrg.us.edusercontent.com/add-message?s=How%27s%20your%20PA%20goes??&user=Jack`. <br>
+`chat`: Contains `"Terry: What's up!!!\n"` from the previous request. <br>
+##### Changes in Field Values: <br >
+The `chat` StringBuilder is appended with the string "Jack: How's your PA goes\n".<br>
+After this request, `chat.toString()` would return: "Jack: How's your PA goes\n" <br>
+
+## Part2 
+### The absolute path to the private key for your SSH key for logging into ieng6 
+![image](re2.2-1.png)
+### The absolute path to the public key for your SSH key for logging into ieng6
+![image](re2.2-2.png)
+### A terminal interaction where you log into your ieng6 account without being asked for a password
+![image](re2.2-3.png)
+
 
