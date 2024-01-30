@@ -49,3 +49,6 @@ class ChatServer {
 }
 ```
 ### screenshots of using `/add-message`
+![image](labre2-1.jpg)
+![image](labre2-1.jpg)
+
