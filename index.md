@@ -1,82 +1,112 @@
-# CSE15l-lab2-report-Terry
-## Part 1
-### Code of ChatServer
-
-```java
-import java.io.IOException;
-import java.net.URI;
-import java.net.URLDecoder;
-import java.io.UnsupportedEncodingException;
-
-class Handler implements URLHandler {
-    private static StringBuilder chat = new StringBuilder();
-
-    public String handleRequest(URI url) {
-        if (url.getPath().equals("/")) {
-            return chat.toString();
-        } else if (url.getPath().equals("/add-message")) {
-            String query = url.getQuery();
-            String[] params = query.split("&");
-            String user = params[1].split("=")[1];
-            String message = params[0].split("=")[1];
-
-            try {
-                user = URLDecoder.decode(user, "UTF-8");
-                message = URLDecoder.decode(message, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-
-            chat.append(user).append(": ").append(message).append("\n");
-            return chat.toString();
-        } else {
-            return "404 Not Found!";
-        }
-    }
-}
-
-class ChatServer {
-    public static void main(String[] args) throws IOException {
-        if(args.length == 0){
-            System.out.println("Missing port number! Try any number between 1024 to 49151");
-            return;
-        }
-
-        int port = Integer.parseInt(args[0]);
-
-        Server.start(port, new Handler());
-    }
-}
+# CSE15l-labReport3-Terry
+## Part 1 Bugs
+### Buggy Program:
+The buggy program I chose is the `reversed` method is thr `ArrayExample.java` <br>
+#### Failure-inducing input
+```java 
+@Test
+  public void testReversed() {
+    int[] input1 = {1, 2, 3, 4, 5, 6};
+    assertArrayEquals(new int[]{6, 5, 4, 3, 2, 1}, ArrayExamples.reversed(input1));
+  }
+ 
 ```
-### screenshots of using `/add-message`
-#### Request 1: `add-message?s=What%27s%20up!!&user=Terry`
-![image](labre2-1.jpg)
-##### Methods Called:
-`handleRequest(URI url)` in Handler class: <br>
-This method is used when a request is received. <br>
-##### Relevant Arguments and Field Values: <br>
-`URI url`: Contains the URL of the request, which would be something like `https://0-0-0-0-4005-gb6t1n903ilvg1h94mja2uhmrg.us.edusercontent.com/add-message?s=What%27s%20up!!&user=Terry`. <br>
-`chat`: A StringBuilder object, initially empty. <br>
-##### Changes in Field Values:
-The `chat` StringBuilder is appended with the string `"Terry: What's up!!!\n"`. <br>
-After this request, chat.toString() would return `"Terry: What's up!!!\n"`. <br>
-#### Request 2: `add-message?s=How%27s%20your%20PA%20goes??&user=Jack`
-![image](labre2-2.jpg)
+#### Input does not induce a failure
+```java
+ @Test 
+  public void testReversedSuccess() {
+      int[] input1 = {1, 2, 3};
+      assertArrayEquals(new int[]{3, 2, 1}, ArrayExamples.reversed(input1)); // This will pass
+  }
+```
 
-##### Methods Called:
-`handleRequest(URI url)` in Handler class: <br>
-Again, this method is triggered for the new request. <br>
-##### Relevant Arguments and Field Values: <br>
-`URI url`: Contains the URL of the request, which would be something like `https://0-0-0-0-4005-gb6t1n903ilvg1h94mja2uhmrg.us.edusercontent.com/add-message?s=How%27s%20your%20PA%20goes??&user=Jack`. <br>
-`chat`: Contains `"Terry: What's up!!!\n"` from the previous request. <br>
-##### Changes in Field Values: <br >
-The `chat` StringBuilder is appended with the string "Jack: How's your PA goes\n".<br>
-After this request, `chat.toString()` would return: "Jack: How's your PA goes\n" <br>
+#### The symptom
+![image](ouputFail.png)
+![image](outputsuccess.png)
 
-## Part2 
-### The absolute path to the private key for your SSH key for logging into ieng6 
-![image](re2.2-1.png)
-### The absolute path to the public key for your SSH key for logging into ieng6
-![image](re2.2-2.png)
-### A terminal interaction where you log into your ieng6 account without being asked for a password
-![image](re2.2-3.png)
+#### Before-and-after code
+##### Before:
+```java
+  static int[] reversed(int[] arr) {
+    int[] newArray = new int[arr.length];
+    for(int i = 0; i < arr.length/2; i ++) {
+      int left = arr[i];
+      int right = arr[arr.length - 1];
+      arr[i] = right;
+      arr[arr.length - i - 1] = left;
+    }
+    return arr;
+  }
+```
+##### After:
+```java
+  static int[] reversed(int[] arr) {
+    int[] newArray = new int[arr.length];
+    for(int i = 0; i < arr.length/2; i ++) {
+      int left = arr[i];
+      int right = arr[arr.length - i - 1];
+      arr[i] = right;
+      arr[arr.length - i - 1] = left;
+    }
+    return arr;
+  }
+```
+#### Why the fix addresses the issue
+The bug was that the original implementation didn't update the value of `int right`. Hence made the value stay unchanged for every iteration. The reason why it passed the 3 - elements testcase is that the value of `int right` didn't need to go through the second iteration. The fixed code ensure that that the pointer `right` can be updated and move to left in every iteration.
+
+## Part 2 - Researching Commands
+### The command I chose -  `grep`
+#### Example 1 - `grep -c`
+```console
+terryren@TerrydeMacBook-Pro plos % grep -c "Kofi Annan" journal.pbio.0020001.txt 
+1
+```
+```console 
+terryren@TerrydeMacBook-Pro plos % grep -c "Annan" journal.pbio.0020001.txt
+7
+```
+The command prints only a count of the lines that match a patter.<br>
+It can be useful when people want to check duplication like methods java files or entries in configuration files.<br>
+**Cited**: `https://www.geeksforgeeks.org/grep-command-in-unixlinux/`
+#### Example 2 - `grep -h`
+```console
+terryren@TerrydeMacBook-Pro plos % grep -h "JSTOR is a creation" journal.pbio.0020010.txt 
+        As an access service, JSTOR is a creation of its time Understandable though the
+```
+```console
+terryren@TerrydeMacBook-Pro plos % grep -h "will" journal.pbio.0020010.txt 
+        retrospective. When we reach that point, JSTOR will still have a valued place in the
+        will be seen as a small-scale pioneer from which we learned valuable lessons.
+```
+The commnad display the lines with the content not the flie name.<br>
+It can be useful when you have a directory with multiple text files, and you wnat to search for a specific pattern within all these files.<br>
+**Cited**: `https://www.geeksforgeeks.org/grep-command-in-unixlinux/`
+#### Example 3 - `grep -i`
+```console
+terryren@TerrydeMacBook-Pro plos % grep -i "hallmark" journal.pbio.0020010.txt 
+        to become the hallmark of the new open-access initiatives as they develop.
+```
+```console
+terryren@TerrydeMacBook-Pro plos % grep -i "orgAn" journal.pbio.0020068.txt 
+        largely shaped the evolution of complex organisms. Endosymbiosis is a specific type of
+        most intimate contact between interacting organisms. Mitochondria and chloroplasts, for
+        Among multicellular organisms, insects as a group form exceptionally diverse
+        genomes have been viewed as analogs to organelles.
+        offspring. Genetic conflicts described between organelle and nuclear genomes of the same
+        organism (Hurst 1995) can provide a context to understand the evolutionary dynamics of
+```
+This command search for a pattern regardless of its case sensitivity(upper or lowercase)<br>
+The command is useful is useful whenever you need to search for text patterns in a case-insensitive manner.
+**Cited**: `https://www.geeksforgeeks.org/grep-command-in-unixlinux/`
+#### Example 4 - `grep -l`
+```console
+terryren@TerrydeMBP biomed % grep -l "clinical" 1468-6708-3-3.txt 
+1468-6708-3-3.txt 
+```
+```console
+terryren@TerrydeMBP biomed % grep -l "kD" 1471-230X-1-5.txt 
+1471-230X-1-5.txt
+```
+The commmand displays list of filenames only.<br>
+The command is useful if  you have a directory with numerous files and you want to find out which files contain a particular string.<br>
+**Cited**: `https://www.geeksforgeeks.org/grep-command-in-unixlinux/`
