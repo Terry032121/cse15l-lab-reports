@@ -1,4 +1,4 @@
-# CSE15l-labReport4-Terry.md
+# CSE15l-labReport4-Terry
 ## Step4
 ![image](step4.png)
 Key pressed: `taren@ieng6.ucsd.edu <enter>` <br>
