@@ -1,6 +1,6 @@
 # CSE15l-labReport3-Terry.md
 ## Step4
-![image](step4.jpg)
+![image](step4.png)
 Key pressed: `taren@ieng6.ucsd.edu <enter>` <br>
 To log into my ieng6
 
